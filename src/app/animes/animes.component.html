@@ -1,0 +1,75 @@
+<div class="grid-container">
+
+
+  <h1 class="mat-h1">Dashboard</h1>
+
+  <div class="container">
+    <div fxLayout="row" fxLayoutAlign="center center" class="content">
+
+      <cdk-virtual-scroll-viewport  fxFlex="60%" style="height: 1500px" [itemSize]="100">
+        <mat-accordion  >
+        <ng-container *cdkVirtualFor="let anime of animesService.animes; templateCacheSize: 0">
+
+          <mat-expansion-panel  #panel (opened)="loadAnime(anime.link)" (closed)="removeAnime()">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{anime.name}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngIf="animesService.animeInfo">
+
+                <mat-card-header>
+                    <mat-card-subtitle>
+                    <mat-chip-list>
+                      <mat-chip *ngFor="let genre of animesService.animeInfo.genres">{{genre}}</mat-chip>
+                    </mat-chip-list>
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image src="{{animesService.animeInfo.image}}" style="height: 200px" alt="Photo of a Shiba Inu">
+                <mat-card-content>
+                  <p>
+                    {{animesService.animeInfo.summary}}
+                  </p>
+                </mat-card-content>
+
+                <div>{{animesService.animeInfo.status}}</div>
+                <div>{{animesService.animeInfo.rating.current}}/{{animesService.animeInfo.rating.max}} with {{animesService.animeInfo.rating.vote}} votes</div>
+                <mat-accordion>
+                    <mat-expansion-panel >
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Episodes
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+
+                    <mat-nav-list>
+                      <mat-list-item *ngFor="let episode of animesService.animeInfo.episodes">
+                        <a matLine href="google.fr">{{episode}}</a>
+                        <button mat-icon-button (click)="showInfo(link)">
+                          <mat-icon>info</mat-icon>
+                        </button>
+                      </mat-list-item>
+                    </mat-nav-list>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <mat-card-actions>
+                  <button mat-button>SEE</button>
+                  <button mat-button>SHARE</button>
+                </mat-card-actions>
+
+
+            </div>
+            <div *ngIf="!animesService.animeInfo" fxLayoutAlign="center center">
+              <mat-spinner></mat-spinner>
+            </div>
+
+          </mat-expansion-panel>
+        </ng-container>
+  </mat-accordion>
+
+  </cdk-virtual-scroll-viewport>
+  </div>
+  </div>
+
+</div>

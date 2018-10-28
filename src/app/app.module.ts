@@ -39,16 +39,26 @@ import {MatButtonModule, MatCheckboxModule, MatIconModule, MatToolbarModule,   M
   MatTabsModule,
   MatTooltipModule,
   MatTreeModule, } from '@angular/material';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import {AnimesService} from '../services/animes.service';
+import {HttpClientModule} from '@angular/common/http';
+import { AnimesComponent } from './animes/animes.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
+import { ScrollingModule } from '@angular/cdk/scrolling';
 @NgModule({
   declarations: [
     AppComponent,
-    SidebarComponent
+    SidebarComponent,
+    AnimesComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ScrollingModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
@@ -87,8 +97,10 @@ import {MatButtonModule, MatCheckboxModule, MatIconModule, MatToolbarModule,   M
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    LayoutModule,
   ],
-  providers: [],
+  providers: [AnimesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
