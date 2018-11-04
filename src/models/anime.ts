@@ -7,6 +7,12 @@ export interface Anime {
   score?: number;
 }
 
+export interface Comment {
+  author: string;
+  message: string;
+  date: number;
+}
+
 export interface AnimeInfo {
   name: string;
   anime: string;

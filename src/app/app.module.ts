@@ -61,6 +61,8 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { HomeComponent } from './home/home.component';
 import { EpisodeComponent } from './episode/episode.component';
 import {UserState} from './state/user.state';
+import { ReversePipe } from './pipes/reverse.pipe';
+import { ToastMessagesComponent } from './toast-messages/toast-messages.component';
 
 
 @NgModule({
@@ -74,7 +76,9 @@ import {UserState} from './state/user.state';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    EpisodeComponent
+    EpisodeComponent,
+    ReversePipe,
+    ToastMessagesComponent
   ],
   imports: [
     BrowserModule,

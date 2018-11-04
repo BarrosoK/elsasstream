@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Anime, AnimeInfo} from '../../models/anime';
+import {Anime, AnimeInfo, Comment} from '../../models/anime';
 import {environment} from '../../environments/environment';
 import {SetWatching} from '../actions/user.action';
 import {Store} from '@ngxs/store';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
 import {UserState} from '../state/user.state';
 import {first, min} from 'rxjs/operators';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {ToastService} from '../../services/toast.service';
+import {AnimesService} from '../../services/animes.service';
+import {AngularFireDatabase, AngularFireList, AngularFireAction} from '@angular/fire/database';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-episode',
@@ -24,6 +28,17 @@ export class EpisodeComponent implements OnInit {
   episodeLinks;
   urls: SafeResourceUrl[] = [];
   currentUrl = 0;
+  comment = '';
+
+  addComment() {
+    const comment: Comment = {
+      author: 'Anon',
+      message: this.comment,
+      date: Date.now()
+    };
+    this.comment = '';
+    this.animeService.addEpisodeComment(this.animeLink, this.episode, comment);
+  }
 
   next() {
     this.currentUrl = Math.min(Math.max(this.currentUrl + 1, 0), this.urls.length - 1);
@@ -42,10 +57,10 @@ export class EpisodeComponent implements OnInit {
           this.store.dispatch(new SetWatching(infos));
         });
       } else {
-       this.anime = res;
+        this.anime = res;
       }
       this.http.get(environment.api + 'anime/' + this.animeLink + '/' + this.episode).subscribe(episode => {
-          this.episodeLinks = episode;
+        this.episodeLinks = episode;
         for (const url of episode['links']) {
           this.urls.push(this.sanitizer.bypassSecurityTrustResourceUrl(url));
         }
@@ -54,16 +69,17 @@ export class EpisodeComponent implements OnInit {
     });
   }
 
-  constructor(private activeRoute: ActivatedRoute, private store: Store, private http: HttpClient, public sanitizer: DomSanitizer) {
+  constructor(private activeRoute: ActivatedRoute, private store: Store, private http: HttpClient, public sanitizer: DomSanitizer,
+              private toast: ToastService, private db: AngularFireDatabase, public animeService: AnimesService) {
     this.anime$ = this.store.select(UserState.getWatching);
     const routeParams = this.activeRoute.snapshot.params;
     this.episode = routeParams.episode;
     this.animeLink = routeParams.anime;
+    this.animeService.getEpisodeComments(this.animeLink, this.episode);
     this.loadAnimeInformations();
-    }
+  }
 
   async ngOnInit() {
-
   }
 
 }
