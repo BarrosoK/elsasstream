@@ -1,9 +1,10 @@
 export interface Anime {
   id?:   number;
-  name: string;
-  desc: string;
+  link?:  string;
+  name?: string;
+  desc?: string;
   image?: string;
-  score: number;
+  score?: number;
 }
 
 export interface AnimeInfo {

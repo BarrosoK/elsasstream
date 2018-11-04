@@ -4,6 +4,11 @@ import { map } from 'rxjs/operators';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav, MatSidenavModule} from '@angular/material';
 import {environment} from '../../environments/environment';
+import {AngularFireAuth} from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import { AngularFirestore } from '@angular/fire/firestore';
+import {AngularFireDatabase} from 'angularfire2/database';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -37,7 +42,13 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  logout() {
+    if (!this.afAuth.auth) { return; }
+    this.afAuth.auth.signOut();
+    this.router.navigate(['']);
+  }
+
+  constructor(private router: Router, private breakpointObserver: BreakpointObserver, public afAuth: AngularFireAuth) {
   }
 
 }

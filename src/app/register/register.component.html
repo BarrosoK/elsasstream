@@ -1,0 +1,77 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+
+  <div fxLayout="row" class="mt-1" *ngIf="successMessage || errorMessage">
+    <mat-card fxFlex="100%">
+      <label class="success">{{successMessage}}</label>
+      <label class="error">{{errorMessage}}</label>
+    </mat-card>
+  </div>
+
+  <div fxLayout="row" class="p-1">
+  <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate>
+
+
+    <mat-card class="register-card" >
+      <mat-card-header>
+        <mat-card-title>Regsitration</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+        <!-- Username -->
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Username" formControlName="username">
+              <mat-error *ngIf="registerForm.controls['username'].hasError('required')">
+                Username is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Email" formControlName="email">
+              <mat-error *ngIf="registerForm.controls['email'].hasError('required')">
+                Email is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Password" type="password" formControlName="password">
+              <mat-error *ngIf="registerForm.controls['password'].hasError('required')">
+                Password is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Password Confirmation -->
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Confirm password" type="password" formControlName="passwordConfirmation">
+              <mat-error *ngIf="registerForm.controls['passwordConfirmation'].hasError('required')">
+                Password confirmation is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </mat-card-actions>
+    </mat-card>
+
+  </form>
+</div>
+</div>

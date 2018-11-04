@@ -43,15 +43,38 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {AnimesService} from '../services/animes.service';
 import {HttpClientModule} from '@angular/common/http';
-import { AnimesComponent } from './animes/animes.component';
+import {AnimesComponent, AnimeOverview} from './animes/animes.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
+import {NgxsModule} from '@ngxs/store';
+import {AnimeState} from './state/anime.state';
+import { AnimefilterPipe } from './pipes/animefilter.pipe';
+import { SortPipe } from './pipes/sort.pipe';
+import { LoginComponent } from './login/login.component';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { RegisterComponent } from './register/register.component';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { HomeComponent } from './home/home.component';
+import { EpisodeComponent } from './episode/episode.component';
+import {UserState} from './state/user.state';
+
+
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     AnimesComponent,
+    AnimefilterPipe,
+    AnimeOverview,
+    SortPipe,
+    LoginComponent,
+    RegisterComponent,
+    HomeComponent,
+    EpisodeComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +122,17 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatTreeModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     LayoutModule,
+    NgxsModule.forRoot([
+      AnimeState,
+      UserState
+    ]),
+    NgxsLoggerPluginModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    AngularFireDatabaseModule
   ],
+  entryComponents: [AnimeOverview],
   providers: [AnimesService],
   bootstrap: [AppComponent]
 })

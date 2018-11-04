@@ -1,0 +1,13 @@
+<div *ngIf="!anime" fxLayoutAlign="center center">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="anime">
+</div>
+<div *ngIf="episodeLinks">
+  amount of player : {{urls.length}}
+  <button (click)="prev()">{{currentUrl}}prev</button>
+  <button (click)="next()">{{currentUrl}}next</button>
+  <div>
+    <iframe width="560" height="315" [src]="urls[currentUrl]" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>

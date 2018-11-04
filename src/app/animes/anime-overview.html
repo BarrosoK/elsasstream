@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>$Title$</title>
+</head>
+<body>
+
+<div fxLayout="row" fxLayoutAlign="center center">
+  <mat-spinner *ngIf="!animeInfos"></mat-spinner>
+</div>
+<div *ngIf="animeInfos">
+
+  <div class="display-4">
+    {{anime.name}}
+  </div>
+  <div  style="height: 30em" class="" fxLayout="column" fxLayoutAlign="center center">
+    <img mat-card-image class="mt-1 p-1 bg-light rounded shadow-sm" fxFlex.lt-md="70%" fxFlex.gt-md="100%"  src="{{animeInfos.image}}"  alt="Photo of a Shiba Inu">
+  </div>
+  <mat-chip-list class="m-1" fxLayoutAlign="center center">
+    <mat-chip *ngFor="let genre of animeInfos.genres">{{genre}}</mat-chip>
+  </mat-chip-list>
+  <div fxLayout="column" fxLayoutAlign="center center" class="border-top border-bottom m-1">
+    <div>{{animeInfos.status}}</div>
+    <div>{{animeInfos.rating.current}}/{{animeInfos.rating.max}} with {{animeInfos.rating.vote}} votes</div>
+  </div>
+
+  <mat-accordion class="ml-1">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Summary
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      {{animeInfos.summary}}
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+  <mat-accordion class="ml-1">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Episodes
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+
+      <cdk-virtual-scroll-viewport fxFlex="100%" style="height: 300px" itemSize="200px">
+
+        <mat-nav-list>
+          <mat-list-item (click)="watchEpisode(episode)"  *cdkVirtualFor="let episode of animeInfos.episodes; templateCacheSize: 100; index as i">
+            <div matLine>{{ episode }}</div>
+            <button mat-icon-button>
+              <mat-icon>arrow_forward_ios</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-nav-list>
+
+      </cdk-virtual-scroll-viewport>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+
+</body>
+</html>

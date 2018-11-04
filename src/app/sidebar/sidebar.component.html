@@ -1,13 +1,14 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-               [mode]="(isHandset$ | async) ? 'over' : 'side'">
+               [mode]="(isHandset$ | async) ? 'over' : 'side'" >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="" (click)="onNavClick()" routerLinkActive="active">Home</a>
       <div>
-        <a mat-list-item routerLink="login" (click)="onNavClick()" routerLinkActive="active">Login</a>
-        <a mat-list-item routerLink="register" (click)="onNavClick()" routerLinkActive="active">Register</a>
+        <a mat-list-item routerLink="login" (click)="onNavClick()" routerLinkActive="active" *ngIf="!afAuth.auth.currentUser">Login</a>
+        <a mat-list-item routerLink="register" (click)="onNavClick()" routerLinkActive="active" *ngIf="!afAuth.auth.currentUser">Register</a>
+        <a mat-list-item routerLink="register" (click)="logout()" routerLinkActive="active" *ngIf="afAuth.auth.currentUser">Logout</a>
         <a mat-list-item routerLink="animes" (click)="onNavClick()" routerLinkActive="active">Animes</a>
       </div>
     </mat-nav-list>

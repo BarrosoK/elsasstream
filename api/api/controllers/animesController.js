@@ -94,8 +94,9 @@ function KickAssAnimeInfo(anime) {
                 );
             });
 
+            episodes.sort((a, b) => a - b);
 
-
+            let name = $('h1').text();
             let img = $('a[data-a]').prev().attr('style').match(/\bhttps?:\/\/\S+?(?=\?)/gi)[0];
             let status = $('div').filter(function() {
                 return $(this).text().trim() === 'Status';
@@ -109,7 +110,7 @@ function KickAssAnimeInfo(anime) {
 
             let current = $('div[class="rating"]').find('div > div > select').attr('data-current-rating');
             let votes = $('div[class="rating"]').find('div > div > span').text().trim();
-            resolve({anime: anime, image: img, summary: summary, episodes: episodes, genres: genres, status: status, rating: {current: current, max: 5, votes: votes}});
+            resolve({anime: anime, name: name, image: img, summary: summary, episodes: episodes, genres: genres, status: status, rating: {current: current, max: 5, votes: votes}});
         });
     });
 }
