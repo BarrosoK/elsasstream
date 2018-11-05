@@ -8,7 +8,9 @@ import { AngularFireDatabase, AngularFireList, AngularFireAction } from '@angula
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
 import * as firebase from 'firebase';
-
+import {AngularFireAuth} from 'angularfire2/auth';
+import {SetSession} from '../app/actions/user.action';
+import {UserState} from '../app/state/user.state';
 
 @Injectable({
   providedIn: 'root'
@@ -23,19 +25,34 @@ export class AnimesService implements OnInit {
   comments$: Observable<AngularFireAction<firebase.database.DataSnapshot>[]>;
   animeEpisode$: BehaviorSubject<string|null>;
 
+  history: Observable<{}[]>;
+  history$: Observable<any[]>;
+
   filterBy(size: string|null) {
     this.animeEpisode$.next(size);
   }
 
-  constructor(private http: HttpClient, private store: Store, private db: AngularFireDatabase) {
+  constructor(private http: HttpClient, private store: Store, private db: AngularFireDatabase, private afAuth: AngularFireAuth) {
+
+    /* Auth */
+    this.afAuth.authState.subscribe(res => {
+        this.store.dispatch(new SetSession(res));
+        if (res) {
+          this.history = this.db.list(`history/${res.uid}/`, ref =>
+            ref ? ref.limitToLast(50) : ref
+          ).auditTrail();
+        }
+    });
+
+    /* NGXS */
     this.animes = this.store.select(state => state.animes.animes);
     this.http.get<Anime[]>(environment.api + 'anime/list').subscribe((animes) => {
       this.aniimes = animes;
       this.toShow = animes;
       this.store.dispatch(new AddAnimes(animes));
-      console.log('done !', this.aniimes);
     });
 
+    /* Firebase */
     this.animeEpisode$ = new BehaviorSubject(null);
     this.comments$ = this.animeEpisode$.pipe(
       switchMap(anime =>
@@ -44,6 +61,7 @@ export class AnimesService implements OnInit {
         ).snapshotChanges()
       )
     );
+
   }
 
   getAnime(anime: string) {
@@ -57,7 +75,7 @@ export class AnimesService implements OnInit {
     this.comments$ = this.animeEpisode$.pipe(
       switchMap(ime =>
         this.db.list(`comments/${anime}/${episode}/`, ref =>
-          ime ? ref.limitToLast(5) : ref
+          ref ? ref.limitToLast(5) : ref
         ).snapshotChanges()
       )
     );
@@ -65,6 +83,19 @@ export class AnimesService implements OnInit {
 
   addEpisodeComment(anime: string, episode, comment: Comment) {
     this.db.list(`/comments/${anime}/${episode}/`).push(comment);
+  }
+
+  async addAnimeToHistory(uid: string, anime: string, episode) {
+    this.history$ = new BehaviorSubject(null);
+    this.history = this.db.list(`history/${uid}/${anime}/${episode}`, ref =>
+          ref ? ref.limitToLast(50) : ref
+        ).valueChanges();
+
+    this.history.subscribe(res => {
+      if (res.length === 0) {
+      this.db.list(`history/${uid}/${anime}/${episode}`).push({anime: anime, episode: episode, date: Date.now()});
+      }
+    });
   }
 
   ngOnInit(): void {

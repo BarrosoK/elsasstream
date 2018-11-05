@@ -63,6 +63,7 @@ import { EpisodeComponent } from './episode/episode.component';
 import {UserState} from './state/user.state';
 import { ReversePipe } from './pipes/reverse.pipe';
 import { ToastMessagesComponent } from './toast-messages/toast-messages.component';
+import { HistoryComponent } from './history/history.component';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { ToastMessagesComponent } from './toast-messages/toast-messages.componen
     HomeComponent,
     EpisodeComponent,
     ReversePipe,
-    ToastMessagesComponent
+    ToastMessagesComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

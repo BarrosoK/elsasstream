@@ -13,6 +13,7 @@ import {AnimesService} from '../../services/animes.service';
 import {AngularFireDatabase, AngularFireList, AngularFireAction} from '@angular/fire/database';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
+import {AngularFireAuth} from 'angularfire2/auth';
 
 @Component({
   selector: 'app-episode',
@@ -64,19 +65,23 @@ export class EpisodeComponent implements OnInit {
         for (const url of episode['links']) {
           this.urls.push(this.sanitizer.bypassSecurityTrustResourceUrl(url));
         }
-
+        console.log(this.urls);
       });
     });
   }
 
   constructor(private activeRoute: ActivatedRoute, private store: Store, private http: HttpClient, public sanitizer: DomSanitizer,
-              private toast: ToastService, private db: AngularFireDatabase, public animeService: AnimesService) {
+              private toast: ToastService, private db: AngularFireDatabase, public animeService: AnimesService, private afAuth: AngularFireAuth) {
     this.anime$ = this.store.select(UserState.getWatching);
     const routeParams = this.activeRoute.snapshot.params;
     this.episode = routeParams.episode;
     this.animeLink = routeParams.anime;
     this.animeService.getEpisodeComments(this.animeLink, this.episode);
     this.loadAnimeInformations();
+    this.store.select(UserState.getSession).subscribe(res => {
+      if (res)
+        this.animeService.addAnimeToHistory(res.uid, this.animeLink, this.episode);
+    });
   }
 
   async ngOnInit() {

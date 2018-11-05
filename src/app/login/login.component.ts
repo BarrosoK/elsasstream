@@ -2,7 +2,7 @@ import {Component, OnInit, HostBinding} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
-import { AngularFirestore } from '@angular/fire/firestore';
+import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireDatabase} from 'angularfire2/database';
 
 import {FormBuilder, Validators} from '@angular/forms';
@@ -36,21 +36,23 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(() => {
+        const provider = new firebase.auth.EmailAuthProvider();
+        return firebase.auth().signInWithEmailAndPassword(this.loginForm.getRawValue().username, this.loginForm.getRawValue().password).then(
+          res => this.router.navigate(['/animes']))
+          .catch(res => console.log(res));
+      });
   }
 
   loginGoogle() {
-    return new Promise<any>((resolve, reject) => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      provider.addScope('profile');
-      provider.addScope('email');
-      this.afAuth.auth
-        .signInWithPopup(provider)
-        .then(res => {
-          resolve(res);
-          this.router.navigate(['/animes']);
-        });
-    });
-  }
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(() => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        return firebase.auth().signInWithPopup(provider).then(
+          res => this.router.navigate(['/animes']))
+          .catch(res => console.log(res));
+      });
 
+  }
 }

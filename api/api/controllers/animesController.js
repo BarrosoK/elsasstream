@@ -19,6 +19,9 @@ function scrapKickAssAnime(name, episode) {
             $('div[class="anime_muti_link"]').find('ul > li > a').each(function (index, element) {
                 links.push($(element).attr('data-video'));
             });
+            $('div[class="embed-container"]').find('iframe').each(function (index, element) {
+                links.push($(element).attr('src'));
+            });
             resolve(links);
         });
     });
@@ -93,10 +96,16 @@ function KickAssAnimeInfo(anime) {
                     $(element).text().split(' ')[1],
                 );
             });
-
+            
             episodes.sort((a, b) => a - b);
 
             let name = $('h1').text();
+            if ($('a[data-a]').prev().attr('style') == undefined) {
+                resolve({
+                    name: 'Anime not found'
+                });
+                return;
+            }
             let img = $('a[data-a]').prev().attr('style').match(/\bhttps?:\/\/\S+?(?=\?)/gi)[0];
             let status = $('div').filter(function() {
                 return $(this).text().trim() === 'Status';

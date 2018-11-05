@@ -1,0 +1,9 @@
+
+<div *ngIf="animeService.history | async; let items; else loading" fxFlex="15%">
+  <div *ngFor="let item of items">
+        {{item.key}}
+  </div>
+  <div *ngIf="items.length === 0">History empty</div>
+</div>
+<ng-template #loading><mat-spinner></mat-spinner>Loading&hellip;</ng-template>
+
