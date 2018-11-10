@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ButtonsModule, InputsModule } from 'angular-bootstrap-md';
 
 import {MatButtonModule, MatCheckboxModule, MatIconModule, MatToolbarModule,   MatAutocompleteModule,
   MatBadgeModule,
@@ -64,7 +65,12 @@ import {UserState} from './state/user.state';
 import { ReversePipe } from './pipes/reverse.pipe';
 import { ToastMessagesComponent } from './toast-messages/toast-messages.component';
 import { HistoryComponent } from './history/history.component';
-
+import { ProfileComponent } from './profile/profile.component';
+import {MDBBootstrapModule} from 'angular-bootstrap-md';
+import { AnimesCardComponent } from './animes-card/animes-card.component';
+import { AnimeInfoComponent } from './anime-info/anime-info.component';
+import { SafePipe } from './pipes/safe.pipe';
+import { WatchlistComponent } from './watchlist/watchlist.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +86,12 @@ import { HistoryComponent } from './history/history.component';
     EpisodeComponent,
     ReversePipe,
     ToastMessagesComponent,
-    HistoryComponent
+    HistoryComponent,
+    ProfileComponent,
+    AnimesCardComponent,
+    AnimeInfoComponent,
+    SafePipe,
+    WatchlistComponent
   ],
   imports: [
     BrowserModule,
@@ -126,6 +137,9 @@ import { HistoryComponent } from './history/history.component';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+    MDBBootstrapModule.forRoot(),
+    ButtonsModule,
+    InputsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     LayoutModule,
     NgxsModule.forRoot([

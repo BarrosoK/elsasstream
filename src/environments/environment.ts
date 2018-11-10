@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   name: 'Stream',
   desc: 'blabla',
-  api: 'http://92.92.192.178:4242/',
+  api: 'http://localhost:4242/',
   firebase: {
     apiKey: 'AIzaSyAy8eN2Jkttd4W3ByZMhgvwkmnQwRnl7zA',
     authDomain: 'elsasstream.firebaseapp.com',

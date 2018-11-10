@@ -9,12 +9,14 @@
         <a mat-list-item routerLink="login" (click)="onNavClick()" routerLinkActive="active" *ngIf="!afAuth.auth.currentUser">Login</a>
         <a mat-list-item routerLink="register" (click)="onNavClick()" routerLinkActive="active" *ngIf="!afAuth.auth.currentUser">Register</a>
         <a mat-list-item routerLink="register" (click)="logout()" routerLinkActive="active" *ngIf="afAuth.auth.currentUser">Logout</a>
+        <a mat-list-item routerLink="register" (click)="logout()" routerLinkActive="profile" *ngIf="afAuth.auth.currentUser">Profile</a>
         <a mat-list-item routerLink="animes" (click)="onNavClick()" routerLinkActive="active">Animes</a>
       </div>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary"  fxLayout="row" fxLayoutAlign="space-between center">
+     <div>
       <button
         type="button"
         aria-label="sidenav"
@@ -24,6 +26,19 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>{{config.name}}</span>
+     </div>
+      <div *ngIf="afAuth.auth.currentUser" class="btn-group" mdbDropdown>
+        <button mdbDropdownToggle type="button" mdbBtn color="deep-purple" class="dropdown-toggle waves-light" mdbWavesEffect>
+          {{afAuth.auth.currentUser.displayName || 'Profile'}}
+        </button>
+
+        <div class="dropdown-menu dropdown-primary">
+          <a class="dropdown-item" routerLink="watchlist">Watchlist</a>
+          <div class="divider dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Settings</a>
+          <a class="dropdown-item" (click)="logout()">Logout</a>
+        </div>
+      </div>
     </mat-toolbar>
     <router-outlet>
     </router-outlet>

@@ -14,12 +14,13 @@
       </mat-form-field>
     </form>
 
-    <div fxLayout="row" fxLayoutAlign="center center" class="content bg-light">
+
+    <div fxLayout="row"  fxLayoutAlign="center center" class="content bg-light">
       <cdk-virtual-scroll-viewport fxFlex="100%" style="height: 700px" [itemSize]="size">
         <mat-nav-list>
-          <mat-list-item (click)="animeOverview(anime)" class="border-bottom shadow-sm" *cdkVirtualFor="let anime of animesService.animes | async | animefilter:search; templateCacheSize: 100; index as i">
-            <div matLine>{{ anime.name }}</div>
-            <button mat-icon-button (click)="showInfo(link)">
+          <mat-list-item (click)="openDialog(anime)" class="animated slideInRight"  *cdkVirtualFor="let anime of animesService.animes | async | animefilter:search; templateCacheSize: 100; index as i">
+            <div  matLine>{{ anime.name }}</div>
+            <button mat-icon-button (click)="openAnime(anime)">
               <mat-icon>info</mat-icon>
             </button>
           </mat-list-item>

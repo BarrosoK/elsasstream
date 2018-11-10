@@ -29,23 +29,15 @@ export class AnimesComponent implements OnInit {
   cdkVirtualScrollViewport: CdkVirtualScrollViewport;
   size = 20;
   animes: Anime[];
-
-  loadAnime(anime: string) {
-    this.size = 20;
-    this.animesService.getAnime(anime);
-    this.cdkVirtualScrollViewport.scrolledIndexChange.subscribe((i) => {
-        this.cdkVirtualScrollViewport.setRenderedRange({start: i - 100, end: i + 100});
-    });
-  }
-
+  
   async animeOverview(anime) {
       this.openDialog(anime);
   }
 
   openDialog(anime): void {
     const dialogRef = this.dialog.open(AnimeOverview, {
-      width: '80%',
       height: '80%',
+      panelClass: 'panelAnime',
       data: anime
     });
 
@@ -68,8 +60,14 @@ export class AnimesComponent implements OnInit {
 
   }
 
-  constructor(private breakpointObserver: BreakpointObserver, private animesService: AnimesService, private store: Store, public dialog: MatDialog) {
+  constructor(private breakpointObserver: BreakpointObserver, private router: Router, private animesService: AnimesService, private store: Store, public dialog: MatDialog) {
   }
+
+  openAnime(anime: Anime) {
+    this.router.navigate(['/anime/detail/' + anime.link]);
+
+  }
+
 
   ngOnInit() {}
 }
@@ -107,6 +105,11 @@ export class AnimeOverview {
       }
 
     });
+  }
+
+  openAnime(anime: AnimeInfo) {
+    this.router.navigate(['/anime/detail/' + this.anime.link]).finally(() => this.dialogRef.close());
+
   }
 
   watchEpisode(episode) {

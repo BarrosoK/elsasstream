@@ -13,15 +13,16 @@ import {AnimesService} from '../../services/animes.service';
 })
 export class HistoryComponent implements OnInit {
 
+  historyRef;
+  history;
+
   constructor(private animeService: AnimesService, public db: AngularFireDatabase, public afAuth: AngularFireAuth) {
-    this.afAuth.authState.subscribe(res => {
-      if (res) {
-        this.animeService.history.subscribe(lol => {
-          lol.forEach(i => {
-          });
-        });
-      }
+    this.historyRef = db.list('/history');
+
+    db.list('/history/').snapshotChanges().subscribe((snap) => {
+      console.log(snap);
     });
+
   }
 
   ngOnInit() {

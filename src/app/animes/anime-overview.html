@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
 
-<div fxLayout="row" fxLayoutAlign="center center">
-  <mat-spinner *ngIf="!animeInfos"></mat-spinner>
+
+<div *ngIf="!animeInfos"  fxLayoutAlign="center center">
+  <mat-spinner ></mat-spinner>
 </div>
-<div *ngIf="animeInfos">
+<div *ngIf="animeInfos" class="pb-2">
 
   <div class="display-4">
     {{anime.name}}
@@ -61,8 +55,6 @@
 
     </mat-expansion-panel>
   </mat-accordion>
+
+  <button (click)="openAnime(animeInfos)">Open</button>
 </div>
-
-
-</body>
-</html>

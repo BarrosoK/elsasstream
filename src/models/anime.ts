@@ -3,7 +3,7 @@ export interface Anime {
   link?:  string;
   name?: string;
   desc?: string;
-  image?: string;
+  image?: {};
   score?: number;
 }
 
@@ -18,6 +18,7 @@ export interface AnimeInfo {
   anime: string;
   image: string;
   summary: string;
+  whImg;
   episodes;
   genres;
   status;

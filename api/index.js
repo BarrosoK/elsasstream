@@ -1,8 +1,9 @@
 var express = require('express'),
   app = express(),
   port = process.env.PORT || 4242,
-  bodyParser = require('body-parser');
-
+  bodyParser = require('body-parser'),
+  animeList = require('./api/controllers/animesController');
+  
   app.use(function (req, res, next) {
       // Website you wish to allow to connect
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 var routes = require('./api/routes/animesRoutes'); //importing route
 routes(app); //register the route
 
+animeList.load();
 
 app.listen(port);
 

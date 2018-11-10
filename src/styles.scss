@@ -21,3 +21,24 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+@media handheld {
+  .panelAnime {
+    background-color: aquamarine;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .panelAnime    {
+    background-color: red;
+    margin: auto;
+    max-width: 40%;
+  }
+}
+
+.panelAnime {
+}
+
+
+

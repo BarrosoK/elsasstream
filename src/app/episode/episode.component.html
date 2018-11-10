@@ -5,42 +5,83 @@
 <div *ngIf="anime">
 </div>
 
-<div *ngIf="episodeLinks" fxLayout="column" fxFlex="85%">
+<div fxLayout.gt-md="row" fxLayout.lt-md="column">
 
-  <div class="p-2 bg-dark" fxLayout="column" fxFlexFill fxLayoutAlign="center center">
-    <iframe class="bg-light" width="1080" height="608" [src]="urls[currentUrl]" frameborder="0" allowfullscreen></iframe>
-    <mat-card fxLayoutAlign="center none" class="p-1 m-1">
-      <button   mat-icon-button (click)="prev()"> <mat-icon aria-label="Side nav toggle icon">skip_previous</mat-icon></button>
-      <div fxLayoutAlign="center center">
-        {{currentUrl + 1}} / {{urls.length}}
+  <div *ngIf="episodeLinks" fxLayout="column" fxFlex="85%">
+
+    <div class="p-2 bg-dark embed-responsive embed-responsive-16by9" fxLayout="column" fxFlexFill
+         fxLayoutAlign="center center">
+      <iframe #iframe class="bg-dark embed-responsive-item" [src]="urls[currentUrl]" frameborder="0"
+              allowfullscreen></iframe>
+
+    </div>
+  </div>
+  <div fxLayout="column">
+    <div fxLayoutAlign="center center">
+      Episode
+    </div>
+    <div>
+      <mat-card fxLayoutAlign="center none" class="p-1 m-1">
+        <button mat-icon-button (click)="prevEpisode()">
+          <mat-icon aria-label="Side nav toggle icon">skip_previous</mat-icon>
+        </button>
+        <div fxLayoutAlign="center center">
+          {{episode}} / {{anime.episodes.length}}
+        </div>
+        <button mat-icon-button (click)="nextEpisode()">
+          <mat-icon aria-label="Side nav toggle icon">skip_next</mat-icon>
+        </button>
+      </mat-card>
+    </div>
+    <div fxLayoutAlign="center center">
+      Player
+    </div>
+    <div>
+      <mat-card fxLayoutAlign="center none" class="p-1 m-1">
+        <button mat-icon-button (click)="prev()">
+          <mat-icon aria-label="Side nav toggle icon">skip_previous</mat-icon>
+        </button>
+        <div fxLayoutAlign="center center">
+          {{currentUrl + 1}} / {{urls.length}}
+        </div>
+        <button mat-icon-button (click)="next()">
+          <mat-icon aria-label="Side nav toggle icon">skip_next</mat-icon>
+        </button>
+      </mat-card>
+    </div>
+    <div *ngIf="animeService.comments$ | async; let items; else loading" fxFlex="15%">
+      <div *ngFor="let item of items">
+        <mat-card>
+          <mat-card-header>
+            {{item.payload.val().author}}
+          </mat-card-header>
+          <mat-card-subtitle>
+            {{item.payload.val().date}}
+          </mat-card-subtitle>
+          <mat-card-content>
+            {{item.payload.val().message}}
+          </mat-card-content>
+        </mat-card>
       </div>
-      <button   mat-icon-button (click)="next()"> <mat-icon aria-label="Side nav toggle icon">skip_next</mat-icon></button>
-    </mat-card>
-  </div>
-</div>
+      <div *ngIf="items.length === 0">No comments</div>
 
-<div *ngIf="animeService.comments$ | async; let items; else loading" fxFlex="15%">
-  <div *ngFor="let item of items">
-    <mat-card>
-      <mat-card-header>
-        {{item.payload.val().author}}
-      </mat-card-header>
-      <mat-card-subtitle>
-        {{item.payload.val().date}}
-      </mat-card-subtitle>
-      <mat-card-content>
-        {{item.payload.val().message}}
-      </mat-card-content>
-    </mat-card>
+    </div>
+
+
+    <form class="">
+      <mat-form-field fxFlex.lt-md="100%" class="">
+        <input matInput placeholder="Write a comment" [(ngModel)]="comment" name="search">
+      </mat-form-field>
+      <span class="input-group-btn">
+      <button mdbBtn color="primary" mdbWavesEffect (click)="addComment()"><i class="fa fa-send-o"
+                                                                              aria-hidden="true"></i></button>
+   </span>
+    </form>
   </div>
-  <div *ngIf="items.length === 0">No comments</div>
-  <form class="">
-    <mat-form-field fxFlex.lt-md="100%">
-      <input matInput placeholder="Write a comment" [(ngModel)]="comment" name="search">
-    </mat-form-field>
-    <button (click)="addComment()">send</button>
-  </form>
-</div>
-<ng-template #loading><mat-spinner></mat-spinner>Loading&hellip;</ng-template>
-<div>
+  <ng-template #loading>
+    <mat-spinner></mat-spinner>
+    Loading&hellip;
+  </ng-template>
+  <div>
+  </div>
 </div>
