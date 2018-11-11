@@ -7,7 +7,7 @@
 
 <div fxLayout.gt-md="row" fxLayout.lt-md="column">
 
-  <div *ngIf="episodeLinks" fxLayout="column" fxFlex="85%">
+  <div *ngIf="urls.length > 0" fxLayout="column" fxFlex="85%">
 
     <div class="p-2 bg-dark embed-responsive embed-responsive-16by9" fxLayout="column" fxFlexFill
          fxLayoutAlign="center center">
@@ -17,6 +17,11 @@
     </div>
   </div>
   <div fxLayout="column">
+    <!-- Buttons -->
+    <div fxLayoutAlign="center center">
+      <button *ngIf="(watched$ | async)?.length == 0" mdbBtn type="button" color="default" (click)="episodeWatched()" class="waves-light" mdbWavesEffect>Watched</button>
+      <button *ngIf="(watched$ | async)?.length > 0" mdbBtn type="button" color="default" (click)="episodeNotWatched()" class="waves-light" mdbWavesEffect>Remove Watched</button>
+    </div>
     <div fxLayoutAlign="center center">
       Episode
     </div>
@@ -26,7 +31,7 @@
           <mat-icon aria-label="Side nav toggle icon">skip_previous</mat-icon>
         </button>
         <div fxLayoutAlign="center center">
-          {{episode}} / {{anime.episodes.length}}
+          {{episode}} / {{anime?.episodes.length}}
         </div>
         <button mat-icon-button (click)="nextEpisode()">
           <mat-icon aria-label="Side nav toggle icon">skip_next</mat-icon>
@@ -64,19 +69,19 @@
         </mat-card>
       </div>
       <div *ngIf="items.length === 0">No comments</div>
-
-    </div>
-
-
-    <form class="">
-      <mat-form-field fxFlex.lt-md="100%" class="">
-        <input matInput placeholder="Write a comment" [(ngModel)]="comment" name="search">
-      </mat-form-field>
-      <span class="input-group-btn">
+      <form class="">
+        <mat-form-field fxFlex.lt-md="100%" class="">
+          <input matInput placeholder="Write a comment" [(ngModel)]="comment" name="search">
+        </mat-form-field>
+        <span class="input-group-btn">
       <button mdbBtn color="primary" mdbWavesEffect (click)="addComment()"><i class="fa fa-send-o"
                                                                               aria-hidden="true"></i></button>
    </span>
-    </form>
+      </form>
+    </div>
+
+
+
   </div>
   <ng-template #loading>
     <mat-spinner></mat-spinner>

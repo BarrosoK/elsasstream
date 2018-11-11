@@ -6,10 +6,10 @@ import {Store} from '@ngxs/store';
 import {AddAnime, AddAnimes} from '../app/actions/anime.action';
 import {AngularFireDatabase, AngularFireList, AngularFireAction} from '@angular/fire/database';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {first, map, switchMap} from 'rxjs/operators';
 import * as firebase from 'firebase';
 import {AngularFireAuth} from 'angularfire2/auth';
-import {SetSession} from '../app/actions/user.action';
+import {AddWatchListAnime, AddWatchListAnimes, RemoveWatchListAnime, SetSession} from '../app/actions/user.action';
 import {UserState} from '../app/state/user.state';
 import {FirebaseError, User} from 'firebase';
 
@@ -65,14 +65,48 @@ export class AnimesService implements OnInit {
 
   }
 
+  episodeWatched(anime: AnimeInfo, episode: number) {
+    const uid = this.store.selectSnapshot(UserState.getSession).uid;
+    this.db.list(`watched/${uid}/${anime.anime}/`).set(episode.toString(), {episode: episode, date: Date()});
+  }
+
+  removeWatched(anime: string, episode) {
+    const uid = this.store.selectSnapshot(UserState.getSession).uid;
+    if (episode > 0 && episode < 10 && episode.toString().length === 1) {
+      episode = '0' + episode;
+    }
+    console.log('removing episode ' + episode);
+    this.db.list(`watched/${uid}/${anime}/`).remove(episode.toString());
+  }
+
   addToWatchList(anime) {
     const uid = this.store.selectSnapshot(UserState.getSession).uid;
     this.db.list(`watchlist/${uid}/`).set(`${anime.anime}`, anime);
+    this.store.dispatch(new AddWatchListAnime(anime));
   }
 
   removeFromWatchList(anime) {
     const uid = this.store.selectSnapshot(UserState.getSession).uid;
     this.db.list(`watchlist/${uid}/`).remove(anime);
+    this.store.dispatch(new RemoveWatchListAnime(anime));
+  }
+
+  getWatchListFromFirebase() {
+    let animes: Observable<any>;
+
+    this.store.select(UserState.getSession).subscribe((session) => {
+      if (session) {
+        const uid = session.uid;
+        const animesRef = this.db.list(`watchlist/${uid}/`);
+        animes = animesRef.snapshotChanges().pipe(
+          map(changes =>
+            changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
+          )
+        );
+        console.log(`watchlist/${uid}/`);
+        animes.pipe(first()).subscribe((res) => this.store.dispatch(new AddWatchListAnimes(res)), (err) => console.log('ERR', err));
+      }
+    });
   }
 
   getUid() {

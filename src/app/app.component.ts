@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AnimesService} from '../services/animes.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'stream';
+  constructor(private animeService: AnimesService) {
+    this.animeService.getWatchListFromFirebase();
+  }
 }
