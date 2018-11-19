@@ -11,12 +11,14 @@ import {AnimesCardComponent} from './animes-card/animes-card.component';
 import {AnimeInfoComponent} from './anime-info/anime-info.component';
 import {AuthGuard} from '../guards/auth.guard';
 import {WatchlistComponent} from './watchlist/watchlist.component';
+import {SettingsComponent} from './settings/settings.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   // Profile
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
+  {path: 'settings', component: SettingsComponent, canActivate: [AuthGuard]},
   {path: 'profile', component: ProfileComponent,  canActivate: [AuthGuard]},
   {path: 'watchlist', component: WatchlistComponent, canActivate: [AuthGuard]},
   // Anime

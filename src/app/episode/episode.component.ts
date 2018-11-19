@@ -26,7 +26,6 @@ import * as firebase from 'firebase';
 export class EpisodeComponent implements OnInit, AfterViewInit {
 
 
-
   constructor(private activeRoute: ActivatedRoute, private store: Store, private http: HttpClient, public sanitizer: DomSanitizer,
               private toast: ToastService, private db: AngularFireDatabase,
               public animeService: AnimesService, private afAuth: AngularFireAuth) {
@@ -41,36 +40,42 @@ export class EpisodeComponent implements OnInit, AfterViewInit {
           this.anime = infos;
           console.log(infos);
           this.store.dispatch(new SetWatching(infos));
-
-          this.store.select(UserState.getSession).subscribe((session) => {
-            console.log('LALLALALALALALALAL');
-            if (!session || !this.anime) {
-              return;
-            }
-            console.log('passed anime !');
-            const uid = session.uid;
-            this.episode$ = new BehaviorSubject(null);
-            this.watched$ = this.episode$.pipe(
-              switchMap(size =>
-                db.list(`watched/${uid}/${this.anime.anime}`, ref =>
-                  size ? ref.orderByKey().equalTo(size.toString()) : ref
-                ).snapshotChanges()
-              )
-            );
-            this.watched$.subscribe((l) => {
-              console.log('CHANGED !!!!!!!', l);
-              (l.length === 0) ? this.alreadyWatched = false : this.alreadyWatched = true;
-            }, (err) => console.log('ERR', err));
-            this.filterBy(this.episode);
-
-
-          });
         });
       } else {
         this.anime = res;
       }
-        this.loadAnimeInformations();
+      this.loadAnimeInformations();
     });
+
+    this.anime$.subscribe((anime) => {
+      this.store.select(UserState.getSession).subscribe((session) => {
+        console.log('LALLALALALALALALAL');
+        if (!session || !this.anime) {
+          return;
+        }
+        console.log('passed anime !');
+        const uid = session.uid;
+        this.episode$ = new BehaviorSubject(null);
+        this.watched$ = this.episode$.pipe(
+          switchMap(size =>
+            db.list(`watched/${uid}/${anime.anime}`, ref =>
+              size ? ref.orderByKey().equalTo(size.toString()) : ref
+            ).snapshotChanges().pipe(
+              map(changes =>
+                changes.map(c => ({key: c.payload.key, ...c.payload.val()}))
+              )
+            )
+          )
+        );
+        this.watched$.subscribe((l) => {
+          console.log('CHANGED !!!!!!!', l);
+          (l.length === 0) ? this.alreadyWatched = false : this.alreadyWatched = true;
+        }, (err) => console.log('ERR', err));
+        this.filterBy(this.episode);
+
+
+      });
+    })
   }
 
   episode;
@@ -86,10 +91,10 @@ export class EpisodeComponent implements OnInit, AfterViewInit {
   @ViewChild('iframe') iframe: HTMLIFrameElement;
 
   alreadyWatched = false;
-  watched$: Observable<AngularFireAction<firebase.database.DataSnapshot>[]>;
-  episode$: BehaviorSubject<string|null>;
+  watched$;
+  episode$: BehaviorSubject<string | null>;
 
-  filterBy(size: string|null) {
+  filterBy(size: string | null) {
     this.episode$.next(size);
   }
 
@@ -102,7 +107,7 @@ export class EpisodeComponent implements OnInit, AfterViewInit {
 
   test() {
     console.log('binded', this.iframe);
-    this.iframe.onclick = function()  {
+    this.iframe.onclick = function () {
       console.log('play');
     };
   }
@@ -133,6 +138,7 @@ export class EpisodeComponent implements OnInit, AfterViewInit {
       this.filterBy(this.episode);
     }
     this.urls.splice(0, this.urls.length);
+
     console.log('getting episode ' + this.episode);
     this.http.get(environment.api + 'anime/' + this.animeLink + '/' + this.episode).subscribe(episode => {
       for (const url of episode['links']) {
@@ -153,7 +159,9 @@ export class EpisodeComponent implements OnInit, AfterViewInit {
   }
 
   nextEpisode() {
-    if ((+this.episode + 1) > this.anime.episodes.length) { return; }
+    if ((+this.episode + 1) > this.anime.episodes.length) {
+      return;
+    }
     this.episode = +this.episode + 1;
     this.animeService.getEpisodeComments(this.animeLink, this.episode);
     this.loadAnimeInformations();
@@ -172,6 +180,7 @@ export class EpisodeComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
+
   }
 
 }

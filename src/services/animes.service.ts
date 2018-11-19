@@ -18,6 +18,11 @@ import {FirebaseError, User} from 'firebase';
 })
 export class AnimesService implements OnInit {
 
+  scrapped: Array<string> = [
+    'KickAssAnime',
+    'NekoStreaming'
+  ];
+
   animes: Observable<Anime[]>;
   toShow: Anime[] = [];
   aniimes: Anime[] = [];

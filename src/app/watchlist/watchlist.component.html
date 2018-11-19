@@ -1,0 +1,28 @@
+
+
+<mat-grid-list [cols]="cols" rowHeight="800">
+  <mat-grid-tile
+                 *ngFor="let anime of animes | async; index as i"
+                 colspan="1" rowspan="1">
+    <mat-card class="dashboard-card z-depth-5 fadeInLeft">
+      <mat-card-header fxLayout="row" fxLayoutAlign="space-around center">
+        <mat-card-title>
+          {{anime.name}}
+          <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="animeService.removeFromWatchList(anime.anime)">Remove</button>
+          </mat-menu>
+        </mat-card-title>
+      </mat-card-header>
+        <img class="img-fluid" mat-card-image  style="margin-left: auto; margin-right: auto" *ngIf="anime.image" [src]="anime.image" alt="anime.link">
+      <mat-card-content class="dashboard-card-content">
+        <div>{{anime.episodes.length}} episodes</div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mdbBtn type="button" color="light-blue" class="waves-light" mdbWavesEffect (click)="watch(anime.anime)">Watch</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

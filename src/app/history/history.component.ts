@@ -16,7 +16,7 @@ export class HistoryComponent implements OnInit {
   historyRef;
   history;
 
-  constructor(private animeService: AnimesService, public db: AngularFireDatabase, public afAuth: AngularFireAuth) {
+  constructor(public animeService: AnimesService, public db: AngularFireDatabase, public afAuth: AngularFireAuth) {
     this.historyRef = db.list('/history');
 
     db.list('/history/').snapshotChanges().subscribe((snap) => {

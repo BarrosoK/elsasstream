@@ -71,6 +71,7 @@ import { AnimesCardComponent } from './animes-card/animes-card.component';
 import { AnimeInfoComponent } from './anime-info/anime-info.component';
 import { SafePipe } from './pipes/safe.pipe';
 import { WatchlistComponent } from './watchlist/watchlist.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { WatchlistComponent } from './watchlist/watchlist.component';
     AnimesCardComponent,
     AnimeInfoComponent,
     SafePipe,
-    WatchlistComponent
+    WatchlistComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

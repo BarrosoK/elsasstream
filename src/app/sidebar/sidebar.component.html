@@ -1,16 +1,41 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-               [mode]="(isHandset$ | async) ? 'over' : 'side'" >
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+              style="width: 20vh">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="" (click)="onNavClick()" routerLinkActive="active">Home</a>
       <div>
-        <a mat-list-item routerLink="login" (click)="onNavClick()" routerLinkActive="active" *ngIf="!afAuth.auth.currentUser">Login</a>
-        <a mat-list-item routerLink="register" (click)="onNavClick()" routerLinkActive="active" *ngIf="!afAuth.auth.currentUser">Register</a>
-        <a mat-list-item routerLink="register" (click)="logout()" routerLinkActive="active" *ngIf="afAuth.auth.currentUser">Logout</a>
-        <a mat-list-item routerLink="register" (click)="logout()" routerLinkActive="profile" *ngIf="afAuth.auth.currentUser">Profile</a>
-        <a mat-list-item routerLink="animes" (click)="onNavClick()" routerLinkActive="active">Animes</a>
+        <!-- HOME -->
+        <a mat-list-item routerLink="" (click)="onNavClick()" routerLinkActive="active">
+          <mat-icon class="mr-1">home</mat-icon>
+          Home
+        </a>
+        <!-- ANIMES -->
+        <a mat-list-item routerLink="animes" (click)="onNavClick()" routerLinkActive="active">
+          <mat-icon class="mr-1">view_list</mat-icon>
+          Animes
+        </a>
+        <!-- LOGIN -->
+        <a mat-list-item routerLink="login" (click)="onNavClick()" routerLinkActive="active" *ngIf="!afAuth.auth.currentUser">
+          <mat-icon class="mr-1">meeting_room</mat-icon>
+          Login
+        </a>
+        <!-- REGISTER -->
+        <a mat-list-item routerLink="register" (click)="onNavClick()" routerLinkActive="active" *ngIf="!afAuth.auth.currentUser">
+          <mat-icon class="mr-1">how_to_reg</mat-icon>
+          Register
+        </a>
+        <!-- PROFILE -->
+        <a mat-list-item routerLink="register" routerLinkActive="profile" *ngIf="afAuth.auth.currentUser">
+          <mat-icon class="mr-1">account_box</mat-icon>
+          Profile
+        </a>
+        <!-- LOGOUT -->
+        <a mat-list-item routerLink="register" (click)="logout()" routerLinkActive="active" *ngIf="afAuth.auth.currentUser">
+          <mat-icon class="mr-1">no_meeting_room</mat-icon>
+          Logout
+        </a>
       </div>
     </mat-nav-list>
   </mat-sidenav>
@@ -35,7 +60,7 @@
         <div class="dropdown-menu dropdown-primary">
           <a class="dropdown-item" routerLink="watchlist">Watchlist</a>
           <div class="divider dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Settings</a>
+          <a class="dropdown-item" routerLink="settings">Settings</a>
           <a class="dropdown-item" (click)="logout()">Logout</a>
         </div>
       </div>

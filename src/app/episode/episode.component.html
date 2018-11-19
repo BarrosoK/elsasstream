@@ -19,8 +19,12 @@
   <div fxLayout="column">
     <!-- Buttons -->
     <div fxLayoutAlign="center center">
-      <button *ngIf="(watched$ | async)?.length == 0" mdbBtn type="button" color="default" (click)="episodeWatched()" class="waves-light" mdbWavesEffect>Watched</button>
+      {{(watched$ | async) | json}}
+      <button *ngIf="(watched$ | async)?.length == 0 || (watched$) == null" mdbBtn type="button" color="default" (click)="episodeWatched()" class="waves-light" mdbWavesEffect>Watched</button>
       <button *ngIf="(watched$ | async)?.length > 0" mdbBtn type="button" color="default" (click)="episodeNotWatched()" class="waves-light" mdbWavesEffect>Remove Watched</button>
+    </div>
+    <div *ngIf="(watched$ | async) && (watched$ | async)?.length > 0" fxLayoutAlign="center center">
+      {{(watched$ | async)?.slice(0, 1)?.date | date:'short'}}
     </div>
     <div fxLayoutAlign="center center">
       Episode

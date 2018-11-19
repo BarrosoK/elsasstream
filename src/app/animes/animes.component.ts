@@ -60,7 +60,7 @@ export class AnimesComponent implements OnInit {
 
   }
 
-  constructor(private breakpointObserver: BreakpointObserver, private router: Router, private animesService: AnimesService, private store: Store, public dialog: MatDialog) {
+  constructor(private breakpointObserver: BreakpointObserver, private router: Router, public animesService: AnimesService, private store: Store, public dialog: MatDialog) {
   }
 
   openAnime(anime: Anime) {

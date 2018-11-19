@@ -1,0 +1,96 @@
+<div fxLayout="column" fxFlex="100%">
+  <div fxLayout="column" fxLayoutAlign="center center"
+       *ngIf="(currentAnime | async) && (currentAnime | async)?.anime != aRouter.snapshot.params['anime']">
+    <mat-spinner></mat-spinner>
+    <div>Fetching selected anime data...</div>
+  </div>
+  <div fxFlex="100%" fxLayoutAlign="center center" *ngIf="currentAnime | async; let anime; else loading"
+       [style.background]="'url('+anime.wh?.fullImage || 'http://via.placeholder.com/640x360'+')' | safe: 'style'"
+       [style.backgroundPosition]="'center' | safe: 'style'" [style.backgroundSize]="'cover' | safe: 'style'">
+
+    <div fxFlex="100%" fxLayoutAlign="center center" class="mask pattern-1">
+      <div class="view overlay" fxFlex="100%" fxLayoutAlign="center center">
+        <img class="img-fluid m-2  z-depth-3" *ngIf="anime.image" [src]="anime.image" alt="anime.link">
+        <div class="mask flex-center rgba-black-strong rgba-black-light waves-ligh" dbWavesEffect fxShow.lt-md="false"
+             fxShow.gt-md="true">
+          <blockquote class="blockquote bq-success">
+            <p class="bq-title">{{anime.name}}</p>
+            <p class="text-white">{{anime.summary}}</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="currentAnime | async; let anime">
+    <!-- GENRES -->
+    <mat-chip-list class="m-1" fxLayoutAlign="center center">
+      <mat-chip *ngFor="let genre of anime.genres">{{genre}}</mat-chip>
+    </mat-chip-list>
+    <!-- STATUS -->
+    <div fxLayout="column" fxLayoutAlign="center center" class="border-top border-bottom m-1">
+      <div>{{anime.status}}</div>
+      <div>{{anime.rating.current}}/{{anime.rating.max}} with {{anime.rating.votes}} votes</div>
+    </div>
+    <!-- WATCHLIST -->
+    <div fxLayoutAlign="center center">
+      <button *ngIf="!alreadyWatchList" mdbBtn type="button" color="default"
+              (click)="animeService.addToWatchList(anime)" class="waves-light" mdbWavesEffect>Add to Watchlist
+      </button>
+      <button *ngIf="alreadyWatchList" mdbBtn type="button" color="unique"
+              (click)="animeService.removeFromWatchList(anime.anime)" class="waves-light" mdbWavesEffect>Remove from
+        watchlist
+      </button>
+    </div>
+    <!-- SUMMARY PHONE -->
+    <div fxShow.lt-md="true" fxShow.gt-md="false">
+      <mat-accordion class="">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Summary
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          {{anime.summary}}
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <!-- EPISODES -->
+    <mat-accordion class="mat-elevation-z1 border" ngStyle.lt-md="margin: 50px;">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Episodes
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+
+        <cdk-virtual-scroll-viewport fxFlex="100%" style="height: 300px" itemSize="200px">
+
+          <mat-nav-list>
+            <mat-list-item class="border-bottom" (click)="watchEpisode(episode)"
+                           *cdkVirtualFor="let episode of anime.episodes; templateCacheSize: 100; index as i">
+              <div matLine>{{ episode }}</div>
+              <button mat-icon-button>
+                <mat-icon>arrow_forward_ios</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-nav-list>
+
+        </cdk-virtual-scroll-viewport>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </div>
+  <ng-template #loading>
+    <div fxLayout="column" fxLayoutAlign="center center">
+
+      <mat-spinner></mat-spinner>
+      <div>
+        Loading...
+      </div>
+    </div>
+  </ng-template>
+
+</div>

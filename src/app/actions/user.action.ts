@@ -24,3 +24,8 @@ export class RemoveWatchListAnime {
   static readonly type = '[Watchlist] Remove';
   constructor(public payload: string) {}
 }
+
+export class SetScrapped {
+  static readonly type = '[User] setScrapped';
+  constructor(public payload: string) {};
+}

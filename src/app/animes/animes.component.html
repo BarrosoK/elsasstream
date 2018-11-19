@@ -5,7 +5,7 @@
 
   <div class="container">
 
-    <h1 class="mat-h1">Animes</h1>
+    <h1 class="mat-h1">Animes <span class="mat-h4">({{(animesService.animes | async)?.length}})</span></h1>
 
 
     <form class="">
@@ -15,13 +15,13 @@
     </form>
 
 
-    <div fxLayout="row"  fxLayoutAlign="center center" class="content bg-light">
-      <cdk-virtual-scroll-viewport fxFlex="100%" style="height: 700px" [itemSize]="size">
-        <mat-nav-list>
-          <mat-list-item (click)="openDialog(anime)" class="animated slideInRight"  *cdkVirtualFor="let anime of animesService.animes | async | animefilter:search; templateCacheSize: 100; index as i">
+    <div fxLayout="row"  fxLayoutAlign="center center" class="content">
+      <cdk-virtual-scroll-viewport class="" fxFlex="100%" style="height: 700px" [itemSize]="size">
+        <mat-nav-list class="p-1">
+          <mat-list-item (click)="openDialog(anime)" class="animated slideInRight mat-elevation-z1"  *cdkVirtualFor="let anime of animesService.animes | async | animefilter:search; templateCacheSize: 100; index as i">
             <div  matLine>{{ anime.name }}</div>
             <button mat-icon-button (click)="openAnime(anime)">
-              <mat-icon>info</mat-icon>
+              <mat-icon>arrow_forward</mat-icon>
             </button>
           </mat-list-item>
         </mat-nav-list>

@@ -8,9 +8,26 @@
   <div class="display-4">
     {{anime.name}}
   </div>
-  <div  style="height: 30em" class="" fxLayout="column" fxLayoutAlign="center center">
-    <img mat-card-image class="mt-1 p-1 bg-light rounded shadow-sm" fxFlex.lt-md="70%" fxFlex.gt-md="100%"  src="{{animeInfos.image}}"  alt="Photo of a Shiba Inu">
-  </div>
+  <div     class="" fxLayout="row" fxLayoutAlign="center center">
+    <div  fxFlex="100%" fxLayoutAlign="center center"
+          [style.background]="'url('+animeInfos.wh?.fullImage || 'http://via.placeholder.com/640x360'+')' | safe: 'style'" [style.backgroundPosition]="'center' | safe: 'style'"  [style.backgroundSize]="'cover' | safe: 'style'" ><!-- [style.backgroundColor]="anime.wh?.colors[0] || red" -->
+
+      <div fxFlex="100%"  fxLayoutAlign="center center" class="mask pattern-1">
+
+        <div class="view overlay" fxFlex="100%" fxLayoutAlign="center center">
+          <!-- <img class="card-image w-100" *ngIf="anime.wh && anime.wh.fullImage" [src]="anime.image"
+               alt="anime.link"> -->
+          <img class="img-fluid m-2  z-depth-3" *ngIf="animeInfos.image" [src]="animeInfos.image" alt="anime.link">
+          <div class="mask flex-center rgba-black-strong rgba-black-light waves-ligh" dbWavesEffect fxShow.lt-md="false" fxShow.gt-md="true">
+            <blockquote class="blockquote bq-success">
+              <p class="bq-title">{{animeInfos.name}}</p>
+              <p class="text-white">{{animeInfos.summary}}</p>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+
+    </div> </div>
   <mat-chip-list class="m-1" fxLayoutAlign="center center">
     <mat-chip *ngFor="let genre of animeInfos.genres">{{genre}}</mat-chip>
   </mat-chip-list>

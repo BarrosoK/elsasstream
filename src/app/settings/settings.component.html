@@ -1,0 +1,6 @@
+<mat-form-field>
+  <mat-select [(value)]="selected">
+    <mat-option *ngFor="let option of animeService.scrapped" value="{{option}}">{{option}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<p>You selected: {{selected}}</p>

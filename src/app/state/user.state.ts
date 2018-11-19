@@ -1,11 +1,12 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import {AnimeInfo} from '../../models/anime';
-import {AddWatchListAnime, AddWatchListAnimes, RemoveWatchListAnime, SetSession, SetWatching} from '../actions/user.action';
+import {AddWatchListAnime, AddWatchListAnimes, RemoveWatchListAnime, SetScrapped, SetSession, SetWatching} from '../actions/user.action';
 import {AngularFireAuth} from 'angularfire2/auth';
 
 export class UserStateModel {
   session: any;
   watching: AnimeInfo;
+  scrapped: string;
   watchList: AnimeInfo[];
 }
 
@@ -14,6 +15,7 @@ export class UserStateModel {
   defaults: {
     watching: null,
     session: null,
+    scrapped: null,
     watchList: [],
   }
 })
@@ -37,6 +39,14 @@ export class UserState {
   @Selector()
   static getWatchlist(state: UserStateModel) {
     return state.watchList;
+  }
+
+  @Action(SetScrapped)
+  setScrapped({getState, patchState}: StateContext<UserStateModel>, {payload}: SetScrapped) {
+    const state = getState();
+    patchState({
+        scrapped: payload
+      });
   }
 
   @Action(SetSession)
